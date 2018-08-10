@@ -1,18 +1,105 @@
 var mongoose = require("mongoose");
+var express = require("express");
+var path = require("path");
 var cheerio = require("cheerio");
 var request = require("request");
-var db = require("../models");
+var app = express();
+var Promise = require("bluebird");
+// var db = require("../models");
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-// mongodb://heroku_h6vd5g5r:Jerry246Fall824@ds119052.mlab.com:19052/heroku_h6vd5g5r
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
 
-var mongooseConnect = mongoose.connection;
+var articles = require("../models/articles");
+var comments = require("../models/comments");
 
-mongooseConnect.on('error', console.log("Error connecting to Mongoose"));
-mongooseConnect.once('open', function() {
-    console.log("Connection to Mongo DB successful");
+app.get("/scrape", function (req, res) {
+    request("http://www.echojs.com/", function (error, response, html) {
+        var $ = cheerio.load(response.data);
+
+        $("article h2").each(function (i, element) {
+            var result = {};
+
+            result.title = $(this)
+                .children("a")
+                .text();
+            result.link = $(this)
+                .children("a")
+                .attr("href");
+
+            articles.create(result)
+                .then(function (dbArticle) {
+                    console.log(dbArticle);
+                })
+                .catch(function (err) {
+                    return res.json(err);
+                });
+
+        });
+
+        res.send("Scrape Complete");
+    });
+});
+
+app.get("/articles", function (req, res) {
+    articles.find({})
+        .then(function (dbArticle) {
+            res.json(dbArticle);
+        })
+        .catch(function (err) {
+            res.json(err)
+        });
+});
+
+app.get("/articles/:id", function (req, res) {
+    articles.findOne({
+            _id: req.params.id
+        }).populate("comment")
+        .then(function (data) {
+            res.json(data);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
+});
+
+app.get("/comments/:id", function(req, res){
+    comments.findOne({
+        _id: req.params.id
+    }).then(function(err, found) {
+        if(err){
+            console.log(err);
+        }
+        else {
+            res.json(found);
+        }
+    });
+});
+
+app.post("/commentsAdd/:id", function (req, res) {
+    comments.create({
+        _id: req.params.id,
+        name: req.body.name,
+        comment: req.body.comment
+    }).then(function (err, add) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Comment Added");
+        }
+    })
+});
+
+app.get("/commentsRemove/:id", function(req, res){
+    comments.remove({
+        _id: req.params.id
+    }).then(function(err, removed){
+        if(err){
+            console.log(err);
+        }
+        else {
+            console.log("Comment Removed");
+        }
+    });
 });
 
 
