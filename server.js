@@ -10,10 +10,11 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 var PORT = process.env.PORT || 3000;
 
-require("./config/connection");
+mongoose.Promise = Promise;
 
-var note = require("./models/note.js");
-var article = require("./models/article.js");
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+mongoose.connect(MONGODB_URI);
 
 app.use(logger("dev"));
 
@@ -22,15 +23,13 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.use(express.static("public"));
-
 app.engine("handlebars", exphbs({
     defaultLayout: "main"
 }));
 
 app.set("view engine", "handlebars");
 
-var routes = require("./controllers/controller");
+var routes = require("./controllers/controller.js");
 app.use("/", routes);
 
 app.listen(PORT, function () {

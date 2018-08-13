@@ -6,15 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mongoose DeGoose</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
-    <script type="text/javascript" src="../../public/app.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+
+
 </head>
 
 <body>
@@ -25,23 +20,37 @@
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/saved">Saved Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Clear Page</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
-        <div class="jumbotron">
+        <div class="jumbotron text-center">
+            <div class="overlay">
+            </div>
+            <div class="background-image" src="http://pre12.deviantart.net/55ff/th/pre/i/2014/027/d/1/futuristic_city_sunset_by_fhelalr-d73xrps.jpg"></div>
             <h1 class="text-center">
                 <strong>All The News That's Fit To Scrape</strong>
             </h1>
             <hr>
-            <h2>Scrape Articles, Comment on Articles, Etc.</h2>
+            <h2 class="text-center">Scrape Articles, Comment on Articles, Etc.</h2>
             <br>
             <div>
                 <button type="button" class="btn btn-lg btn-warning">
                     <h4>Scrape Articles</h4>
                 </button>
             </div>
-        </div>
-
-        <div class="main-img-container">
-            <img class="main-img" src="https://dss.lafayette.edu/wp-content/uploads/sites/169/2017/08/lafayette-newspaper-a-1440x810.png" alt="header-image-newspaper">
         </div>
 
         {{{body}}}
@@ -54,6 +63,11 @@
             </div>
         </footer>
     </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
 </body>
 
 </html>

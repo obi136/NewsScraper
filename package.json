@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/obi136/NewsScraper#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",

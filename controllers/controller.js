@@ -5,6 +5,7 @@ var cheerio = require("cheerio");
 var request = require("request");
 var app = express();
 var Promise = require("bluebird");
+var axios = require("axios");
 // var db = require("../models");
 
 mongoose.Promise = Promise;
@@ -12,9 +13,21 @@ mongoose.Promise = Promise;
 var articles = require("../models/articles");
 var comments = require("../models/comments");
 
+app.get("/", function (req, res) {
+    articles.find({})
+        .then(function (dbArticle) {
+            console.log(dbArticle)
+            res.render("index", dbArticle);
+        })
+        .catch(function (err) {
+            res.json(err)
+        });
+});
+
+
 app.get("/scrape", function (req, res) {
-    request("http://www.echojs.com/", function (error, response, html) {
-        var $ = cheerio.load(response.data);
+    return axios.get("http://www.echojs.com/").then(function(res) {
+        var $ = cheerio.load(res.data);
 
         $("article h2").each(function (i, element) {
             var result = {};
@@ -36,7 +49,7 @@ app.get("/scrape", function (req, res) {
 
         });
 
-        res.send("Scrape Complete");
+        // res.send("Scrape Complete");
     });
 });
 
@@ -62,14 +75,13 @@ app.get("/articles/:id", function (req, res) {
         });
 });
 
-app.get("/comments/:id", function(req, res){
+app.get("/comments/:id", function (req, res) {
     comments.findOne({
         _id: req.params.id
-    }).then(function(err, found) {
-        if(err){
+    }).then(function (err, found) {
+        if (err) {
             console.log(err);
-        }
-        else {
+        } else {
             res.json(found);
         }
     });
@@ -89,14 +101,13 @@ app.post("/commentsAdd/:id", function (req, res) {
     })
 });
 
-app.get("/commentsRemove/:id", function(req, res){
+app.get("/commentsRemove/:id", function (req, res) {
     comments.remove({
         _id: req.params.id
-    }).then(function(err, removed){
-        if(err){
+    }).then(function (err, removed) {
+        if (err) {
             console.log(err);
-        }
-        else {
+        } else {
             console.log("Comment Removed");
         }
     });
