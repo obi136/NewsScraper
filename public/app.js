@@ -1,13 +1,23 @@
 $(document).ready(function(){
 
+
     $.getJSON("/scrape", function(data){
 
     });
 
-    $(document).on("click", "#getArticles", function(){
+    $(document).on("click", "#articlesID", function(){
+        console.log("click");
         $.getJSON("/articles", function(data){
+            console.log(data);
             for (var i = 0; i < data.length; i++) {
-                $("#article").append("<p data-id'" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+                var dataLink = data[i].link
+                var lastChar = dataLink[dataLink.length -1];
+                if(lastChar === "/"){
+                    console.log("found slash");
+                    dataLink[(dataLink.length -1)] = "";
+                }
+                $("#articlesID").append("<p data-id=" + data[i]._id + ">" + data[i].title + "</p>" + "<p> <a href=" + dataLink + " class='link'>" + dataLink + "</a>" + "</p>");
+                
             }
         });
     });

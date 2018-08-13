@@ -16,7 +16,7 @@ var comments = require("../models/comments");
 app.get("/", function (req, res) {
     articles.find({})
         .then(function (dbArticle) {
-            console.log(dbArticle)
+            // console.log(dbArticle)
             res.render("index", dbArticle);
         })
         .catch(function (err) {
@@ -41,7 +41,7 @@ app.get("/scrape", function (req, res) {
 
             articles.create(result)
                 .then(function (dbArticle) {
-                    console.log(dbArticle);
+                    // console.log(dbArticle);
                 })
                 .catch(function (err) {
                     return res.json(err);
@@ -56,6 +56,8 @@ app.get("/scrape", function (req, res) {
 app.get("/articles", function (req, res) {
     articles.find({})
         .then(function (dbArticle) {
+            console.log("********************************");
+            // console.log(dbArticle);
             res.json(dbArticle);
         })
         .catch(function (err) {
