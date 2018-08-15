@@ -26,7 +26,7 @@ app.get("/", function (req, res) {
 
 
 app.get("/scrape", function (req, res) {
-    return axios.get("http://www.echojs.com/").then(function(res) {
+    return axios.get("http://www.echojs.com/").then(function (res) {
         var $ = cheerio.load(res.data);
 
         $("article h2").each(function (i, element) {
@@ -77,43 +77,72 @@ app.get("/articles/:id", function (req, res) {
         });
 });
 
-app.get("/comments/:id", function (req, res) {
-    comments.findOne({
-        _id: req.params.id
-    }).then(function (err, found) {
+app.get("/comments", function (req, res) {
+    comments.find({})
+        .then(function (dbArticle) {
+            //    console.log("********************************");
+            // console.log(dbArticle);
+            res.json(dbArticle);
+        })
+        .catch(function (err) {
+            res.json(err)
+        });
+});
+
+app.post("/comments/:id", function (req, res) {
+
+    var newComment = {
+        articleId: req.params.id,
+        name: "name",
+        comment: req.body.comment
+    }
+    console.log(newComment);
+    comments.create(
+        newComment
+    ).then(function (found, err) {
         if (err) {
             console.log(err);
         } else {
+            console.log(found);
             res.json(found);
         }
     });
 });
 
-app.post("/commentsAdd/:id", function (req, res) {
-    comments.create({
-        _id: req.params.id,
-        name: req.body.name,
-        comment: req.body.comment
-    }).then(function (err, add) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Comment Added");
-        }
-    })
-});
+// app.post("/commentsAdd/:id", function (req, res) {
+//     comments.create({
+//         _id: req.params.id,
+//         comment: req.body.comment
+//     }).then(function (err, add) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             console.log("Comment Added");
+//         }
+//     })
+// });
 
-app.get("/commentsRemove/:id", function (req, res) {
+app.post("/comments/:id", function (req, res) {
     comments.remove({
         _id: req.params.id
     }).then(function (err, removed) {
         if (err) {
             console.log(err);
         } else {
-            console.log("Comment Removed");
+            //console.log("Comment Removed");
         }
     });
 });
+
+app.get("/saved", function (req, res) {
+    articles.find({ saved: true })
+        .then(function (dbArticle) {
+            res.render("saved", {articles: dbArticle});
+        })
+        .catch(function (err) {
+            res.json(err)
+        });
+})
 
 
 
